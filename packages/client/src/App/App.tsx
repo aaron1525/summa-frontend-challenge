@@ -7,7 +7,7 @@ import image2 from "../assets/product2.webp";
 import image3 from "../assets/product3.webp";
 
 import { products } from "./constants";
-import CardList from "./components/CardList";
+import Card from "./components/Card";
 
 type product = {
   id: number;
@@ -57,6 +57,7 @@ const App: React.FC = () => {
   React.useEffect(
     () => {
       handleClick();
+      console.log(typeof handleClick);
     } /* eslint-disable-line */,
     []
   );
@@ -81,12 +82,17 @@ const App: React.FC = () => {
         {isLoading ? (
           <p>Cargando...</p>
         ) : (
-          <CardList
-            handleClick={handleClick}
-            images={images}
-            impressions={impressions}
-            products={products}
-          />
+          products.map((item: product, index: number) => {
+            return (
+              <Card
+                key={index}
+                handleClick={handleClick}
+                image={images[index]}
+                impression={impressions[index]}
+                product={item}
+              />
+            );
+          })
         )}
       </main>
     </>

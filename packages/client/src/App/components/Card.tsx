@@ -16,8 +16,9 @@ type impression = {
 const Card: React.FC<{
   impression: impression;
   product: product;
-  image: any;
-  handleClick: any;
+  image: string;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  handleClick: Function;
 }> = ({ impression, product, image, handleClick }) => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
