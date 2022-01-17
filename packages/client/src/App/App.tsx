@@ -8,6 +8,7 @@ import image3 from "../assets/product3.webp";
 
 import { products } from "./constants";
 import Card from "./components/Card";
+import fetchProduct from "./services/ProductService";
 
 type product = {
   id: number;
@@ -25,21 +26,9 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [keepFetching, setKeepFetching] = React.useState<number>(0);
   const images = [image1, image2, image3];
-
-  const fetchProduct = async (id: number) => {
-    const options = { method: "GET" };
-    const response = await fetch(
-      "http://localhost:8000/status/" + String(id),
-      options
-    );
-    const data = await response.json();
-
-    return data;
-  };
+  const opens = [false, false, false];
 
   const fetchProducts = (products: Array<product>) => {
-    console.log(keepFetching);
-
     const promesas = products.map((product: product) => {
       return fetchProduct(product.id);
     });
@@ -56,23 +45,24 @@ const App: React.FC = () => {
 
   React.useEffect(
     () => {
-      handleClick();
-      console.log(typeof handleClick);
+      handleClick(false, 1);
     } /* eslint-disable-line */,
     []
   );
 
-  const handleClick = () => {
-    if (keepFetching) {
+  const handleClick = (isOpen: boolean, index: number) => {
+    opens[index] = isOpen;
+    if (keepFetching && opens.some((e) => e)) {
       clearInterval(keepFetching);
       setKeepFetching(0);
 
       return;
     }
+    if (opens.every((e) => e === false)) {
+      const newIntervalId = setInterval(() => fetchProducts(products), 5000);
 
-    const newIntervalId = setInterval(() => fetchProducts(products), 5000);
-
-    setKeepFetching(newIntervalId);
+      setKeepFetching(newIntervalId);
+    }
   };
 
   return (

@@ -23,8 +23,8 @@ const Card: React.FC<{
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
   const handleClickCard = () => {
-    handleClick();
     setIsOpen(!isOpen);
+    handleClick(!isOpen, product.id - 1);
   };
 
   return (
